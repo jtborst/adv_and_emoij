@@ -18,6 +18,7 @@ package com.example.android.emojify;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -30,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -159,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // If the image capture activity was called and was successful
+        Log.i(getClass().getCanonicalName(), "got data");
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             // Process the image and set it to the TextView
             processAndSetImage();
@@ -185,6 +189,11 @@ public class MainActivity extends AppCompatActivity {
         mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
 
         // TODO (3): Call the new detectFaces() method, passing in the resampled bitmap to detect the faces in the picture.
+        int faces = Emojifier.detectFaces(this, mResultsBitmap);
+
+        if (faces == 0) {
+            Toast.makeText(this, "no faces found", Toast.LENGTH_SHORT).show();
+        }
 
         // Set the new bitmap to the ImageView
         mImageView.setImageBitmap(mResultsBitmap);
