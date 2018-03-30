@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1;
 
     private static final String FILE_PROVIDER_AUTHORITY = "com.example.android.emojify.fileprovider";
+    private static final String SAVE_PHOTO = "photo";
 
     private ImageView mImageView;
 
@@ -72,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
         mSaveFab = (FloatingActionButton) findViewById(R.id.save_button);
         mClearFab = (FloatingActionButton) findViewById(R.id.clear_button);
         mTitleTextView = (TextView) findViewById(R.id.title_text_view);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SAVE_PHOTO)) {
+            mTempPhotoPath = savedInstanceState.getString(SAVE_PHOTO);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(SAVE_PHOTO, mTempPhotoPath);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
